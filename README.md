@@ -41,12 +41,19 @@ Credentials are not stored in the repo. Create a local config from the template:
 cp elastic.env.template elastic.env
 ```
 
-Edit `elastic.env` and set:
+Edit `elastic.env` and set **ELASTIC_URL** and **API_KEY** (see below). The file `elastic.env` is gitignored and will not be committed.
 
-- **ELASTIC_URL** — your Elasticsearch endpoint (e.g. `https://your-deployment.es.region.gcp.elastic.cloud`)
-- **API_KEY** — a base64 API key with index write permissions
+**Find your Elasticsearch URL**
 
-The file `elastic.env` is gitignored and will not be committed.
+- **Elastic Cloud**: Open the [Elastic Cloud console](https://cloud.elastic.co), select your deployment, and copy the **Elasticsearch** endpoint from the deployment overview (e.g. `https://your-deployment.es.us-central1.gcp.elastic.cloud`).
+- **Kibana**: Go to **Management** → **Stack Management** → **Index Management** (or **Fleet** → **Settings**). The Elasticsearch URL is shown in the cluster/deployment details.
+
+**Generate an API key**
+
+1. In Kibana, go to **Management** → **Stack Management** → **API Keys** (under **Security**).
+2. Click **Create API key**. Give it a name (e.g. `streams-messy-logs`).
+3. Assign a role that allows writing to indices (e.g. a custom role with `create_index`, `index`, and `create_doc` on `logs.*`, or use a built-in role that includes index management).
+4. Create the key and copy the generated **API key** value (base64 string). Store it somewhere safe; the secret is only shown once.
 
 ### Run the scripts
 
@@ -75,20 +82,41 @@ You can run one or both. Each script sends batches to the wired streams Bulk API
 
 A good way to demo Streams and the AI assistant is to run a short “incident and resolution” cycle.
 
+**Run each script in its own terminal window** so both can send logs at the same time. Use two terminals for the two scripts.
+
 ### 1. Baseline (normal)
 
-Start one or both scripts in normal mode and let them run for a few minutes so the cluster has a baseline of “healthy” logs.
+In **terminal 1**, run the AWS (CloudWatch) script:
+
+```bash
+./aws_cloudwatch_logs.sh
+```
+
+In **terminal 2**, run the on-prem (Kafka) script:
+
+```bash
+./onprem_kafka_logs.sh
+```
+
+Leave both running for a few minutes so the cluster has a baseline of “healthy” logs.
 
 ### 2. Inject failure
 
-Stop the scripts and restart them with `--mode failure`:
+Stop both scripts (Ctrl+C in each terminal). Then restart them with `--mode failure` so they send failure-style logs.
+
+In **terminal 1**:
 
 ```bash
 ./aws_cloudwatch_logs.sh --mode failure
+```
+
+In **terminal 2**:
+
+```bash
 ./onprem_kafka_logs.sh --mode failure
 ```
 
-Keep this running for a few minutes so there is a clear “during incident” window.
+Keep both running for a few minutes so there is a clear “during incident” window.
 
 In failure mode:
 
@@ -106,7 +134,19 @@ Use the [Elastic AI Agent](https://www.elastic.co/docs/explore-analyze/ai-featur
 
 ### 4. Mitigate (back to normal)
 
-Stop the scripts and run them again **without** `--mode failure` to simulate recovery.
+Stop both scripts (Ctrl+C). Simulate recovery by running them again **without** `--mode failure`.
+
+In **terminal 1**:
+
+```bash
+./aws_cloudwatch_logs.sh
+```
+
+In **terminal 2**:
+
+```bash
+./onprem_kafka_logs.sh
+```
 
 ### 5. Confirm resolution
 
