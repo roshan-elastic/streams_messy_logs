@@ -13,13 +13,14 @@ fi
 MODE="normal"
 STATE="HEALTHY"
 LOGS_PER_REQUEST=100
-INDEX=logs.otel
+PREFERRED_SCHEMA=otel
 
 # Parse command line flags
 while [[ "$#" -gt 0 ]]; do
     case $1 in
         --mode) MODE="$2"; shift ;;
         --logs-per-request) LOGS_PER_REQUEST="$2"; shift ;;
+        --preferred-schema) PREFERRED_SCHEMA="$2"; shift ;;
         *) echo "Unknown parameter: $1"; exit 1 ;;
     esac
     shift
@@ -90,7 +91,7 @@ while true; do
   done
 
   # Send to the logs endpoint
-  BULK_URL="$ELASTIC_URL/$INDEX/_bulk"
+  BULK_URL="$ELASTIC_URL/logs.$PREFERRED_SCHEMA/_bulk"
   RESPONSE=$(curl -s -w "\n%{http_code}" -X POST "$BULK_URL" \
     -H "Authorization: ApiKey $API_KEY" \
     -H "Content-Type: application/x-ndjson" \
