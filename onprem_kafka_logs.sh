@@ -41,8 +41,21 @@ TEAM_MAP=(
   "onprem-linux-jumphost"       "Security-Ops"
 )
 
+# Kafka topic IDs per team (each team may have many topics)
+typeset -A TEAM_TOPIC_IDS
+TEAM_TOPIC_IDS=(
+  "Network-Ops"       "lb-metrics lb-health ingress-events"
+  "Mainframe-Core"    "db2-audit cics-transactions ims-logs"
+  "Data-Platform"    "erp-payments erp-ledger oracle-alerts"
+  "Identity-Sec"     "ad-auth ad-audit kerberos-events"
+  "Infra-Cloud"      "vcenter-events vm-metrics cluster-state"
+  "App-Middleware"   "mq-payments mq-inventory mq-sync"
+  "Security-Ops"     "ssh-audit firewall-events jumphost-logs"
+)
+
 SERVICES=("${(k)TEAM_MAP[@]}")
 typeset -A SAMPLES
+typeset -A SAMPLES_TOPIC
 
 while true; do
   PAYLOAD=""
@@ -89,9 +102,15 @@ while true; do
 
     SAMPLES[$SVC]=$MSG
 
+    # Kafka topic IDs for this team (pick one for this log, keep full list for context) (pick one for this log, keep full list for context)
+    TOPIC_LIST_STR="${TEAM_TOPIC_IDS[$TEAM]:-default-topic}"
+    topics=("${(s: :)TOPIC_LIST_STR}")
+    TOPIC_ID=$topics[$((RANDOM % ${#topics[@]} + 1))]
+    SAMPLES_TOPIC[$SVC]=$TOPIC_ID
+
     ESCAPED_MSG=$(python3 -c "import json, sys; print(json.dumps(sys.argv[1]))" "$MSG")
     PAYLOAD+="{\"create\": {}}"$'\n'
-    PAYLOAD+="{\"@timestamp\": \"$TS\", \"source\": \"logs team\", \"team-name\": \"$TEAM\", \"service.name\": \"$SVC\", \"body.text\": $ESCAPED_MSG}"$'\n'
+    PAYLOAD+="{\"@timestamp\": \"$TS\", \"source\": \"logs team\", \"team-name\": \"$TEAM\", \"service.name\": \"$SVC\", \"kafka.topic.id\": \"$TOPIC_ID\", \"body.text\": $ESCAPED_MSG}"$'\n'
   done
 
   # Sending to /logs/_bulk
@@ -107,10 +126,10 @@ while true; do
   echo "🏢 ON-PREM KAFKA INGEST | MODE: $MODE | STATE: $STATE | BATCH SIZE: $LOGS_PER_REQUEST | HTTP: $HTTP_STATUS"
   echo "API: POST $BULK_URL"
   echo "--------------------------------------------------------------------------------"
-  printf "%-28s | %-15s | %-40s\n" "SERVICE" "TEAM" "LATEST LOG MESSAGE"
+  printf "%-28s | %-15s | %-18s | %-40s\n" "SERVICE" "TEAM" "KAFKA.TOPIC.ID" "LATEST LOG MESSAGE"
   echo "--------------------------------------------------------------------------------"
   for s in "${SERVICES[@]}"; do
-    printf "%-28s | %-15s | %-40s\n" "$s" "$TEAM_MAP[$s]" "${SAMPLES[$s]}"
+    printf "%-28s | %-15s | %-18s | %-40s\n" "$s" "$TEAM_MAP[$s]" "${SAMPLES_TOPIC[$s]:--}" "${SAMPLES[$s]}"
   done
   
   [[ "$HTTP_STATUS" != "200" ]] && echo "\n❌ API ERROR: $(echo "$RESPONSE" | sed '$d')"
