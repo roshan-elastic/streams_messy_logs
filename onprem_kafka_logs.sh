@@ -114,13 +114,15 @@ while true; do
   done
 
   # Sending to /logs/_bulk
-  BULK_URL="$ELASTIC_URL/logs.$PREFERRED_SCHEMA/_bulk"
+  BULK_URL="$ELASTIC_URL/logs/_bulk"
   RESPONSE=$(curl -s -w "\n%{http_code}" -X POST "$BULK_URL" \
     -H "Authorization: ApiKey $API_KEY" \
     -H "Content-Type: application/x-ndjson" \
     --data-binary "$PAYLOAD")
 
   HTTP_STATUS=$(echo "$RESPONSE" | tail -n 1)
+  BODY=$(echo "$RESPONSE" | sed '$d')
+  HAS_ERRORS=$(echo "$BODY" | python3 -c "import sys,json; d=json.load(sys.stdin); print('yes' if d.get('errors') else 'no')" 2>/dev/null)
 
   clear
   echo "🏢 ON-PREM KAFKA INGEST | MODE: $MODE | STATE: $STATE | BATCH SIZE: $LOGS_PER_REQUEST | HTTP: $HTTP_STATUS"
@@ -131,8 +133,21 @@ while true; do
   for s in "${SERVICES[@]}"; do
     printf "%-28s | %-15s | %-18s | %-40s\n" "$s" "$TEAM_MAP[$s]" "${SAMPLES_TOPIC[$s]:--}" "${SAMPLES[$s]}"
   done
-  
-  [[ "$HTTP_STATUS" != "200" ]] && echo "\n❌ API ERROR: $(echo "$RESPONSE" | sed '$d')"
+
+  if [[ "$HTTP_STATUS" != "200" ]]; then
+    echo "\n❌ HTTP ERROR ($HTTP_STATUS): $BODY"
+  elif [[ "$HAS_ERRORS" == "yes" ]]; then
+    FIRST_ERR=$(echo "$BODY" | python3 -c "
+import sys,json
+d=json.load(sys.stdin)
+for item in d.get('items',[]):
+  for op in item.values():
+    if op.get('error'):
+      print(json.dumps(op['error'], indent=2))
+      sys.exit()
+")
+    echo "\n❌ BULK ERRORS (first): $FIRST_ERR"
+  fi
   
   sleep 1
 done
