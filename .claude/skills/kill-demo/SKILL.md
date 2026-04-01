@@ -8,7 +8,7 @@ allowed-tools: Bash
 Kill any currently running instances of the log ingest scripts:
 
 ```
-pkill -f "aws_cloudwatch_logs.sh" 2>/dev/null; pkill -f "onprem_kafka_logs.sh" 2>/dev/null
+pkill -f "aws_cloudwatch_logs.sh" 2>/dev/null || true; pkill -f "onprem_kafka_logs.sh" 2>/dev/null || true
 ```
 
 Confirm to the user that the demo scripts have been stopped.

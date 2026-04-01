@@ -1,19 +1,20 @@
 #!/bin/zsh
 # On-Prem / Hybrid Kafka Ingest - Professional Demo Version
 SCRIPT_DIR="${0:A:h}"
+[[ -f "$SCRIPT_DIR/term_theme.sh" ]] && source "$SCRIPT_DIR/term_theme.sh"
 if [[ -f "$SCRIPT_DIR/elastic.env" ]]; then
   source "$SCRIPT_DIR/elastic.env"
 else
-  echo "Missing elastic.env. Copy elastic.env.template to elastic.env and set ELASTIC_URL and API_KEY." >&2
+  echo "${T_RED}Missing elastic.env. Copy elastic.env.template to elastic.env and set ELASTIC_URL and API_KEY.${T_RESET}" >&2
   exit 1
 fi
-[[ -z "$ELASTIC_URL" || -z "$API_KEY" ]] && { echo "ELASTIC_URL and API_KEY must be set in elastic.env." >&2; exit 1; }
+[[ -z "$ELASTIC_URL" || -z "$API_KEY" ]] && { echo "${T_RED}ELASTIC_URL and API_KEY must be set in elastic.env.${T_RESET}" >&2; exit 1; }
 
 # Default Values
 MODE="normal"
 STATE="HEALTHY"
 LOGS_PER_REQUEST=100
-PREFERRED_SCHEMA=otel
+PREFERRED_SCHEMA=""
 
 # Parse command line flags
 while [[ "$#" -gt 0 ]]; do
@@ -21,10 +22,21 @@ while [[ "$#" -gt 0 ]]; do
         --mode) MODE="$2"; shift ;;
         --logs-per-request) LOGS_PER_REQUEST="$2"; shift ;;
         --preferred-schema) PREFERRED_SCHEMA="$2"; shift ;;
-        *) echo "Unknown parameter: $1"; exit 1 ;;
+        *) echo "${T_RED}Unknown parameter: $1${T_RESET}" >&2; exit 1 ;;
     esac
     shift
 done
+
+if [[ -z "$PREFERRED_SCHEMA" ]]; then
+  BULK_URL="$ELASTIC_URL/logs/_bulk"
+  term_logs_deprecation_info
+elif [[ "$PREFERRED_SCHEMA" == "otel" || "$PREFERRED_SCHEMA" == "ecs" ]]; then
+  BULK_URL="$ELASTIC_URL/logs.$PREFERRED_SCHEMA/_bulk"
+  term_wired_stream_info "$PREFERRED_SCHEMA" "$BULK_URL"
+else
+  echo "${T_RED}Unknown --preferred-schema:${T_RESET} ${T_YELLOW}$PREFERRED_SCHEMA${T_RESET} ${T_DIM}(use otel or ecs, or omit for POST /logs/_bulk).${T_RESET}" >&2
+  exit 1
+fi
 
 [[ "$MODE" == "failure" ]] && STATE="CRITICAL"
 
@@ -102,7 +114,7 @@ while true; do
 
     SAMPLES[$SVC]=$MSG
 
-    # Kafka topic IDs for this team (pick one for this log, keep full list for context) (pick one for this log, keep full list for context)
+    # Kafka topic IDs for this team (pick one for this log)
     TOPIC_LIST_STR="${TEAM_TOPIC_IDS[$TEAM]:-default-topic}"
     topics=("${(s: :)TOPIC_LIST_STR}")
     TOPIC_ID=$topics[$((RANDOM % ${#topics[@]} + 1))]
@@ -113,8 +125,6 @@ while true; do
     PAYLOAD+="{\"@timestamp\": \"$TS\", \"source\": \"logs team\", \"team-name\": \"$TEAM\", \"service.name\": \"$SVC\", \"kafka.topic.id\": \"$TOPIC_ID\", \"body.text\": $ESCAPED_MSG}"$'\n'
   done
 
-  # Sending to /logs/_bulk
-  BULK_URL="$ELASTIC_URL/logs/_bulk"
   RESPONSE=$(curl -s -w "\n%{http_code}" -X POST "$BULK_URL" \
     -H "Authorization: ApiKey $API_KEY" \
     -H "Content-Type: application/x-ndjson" \
@@ -125,17 +135,23 @@ while true; do
   HAS_ERRORS=$(echo "$BODY" | python3 -c "import sys,json; d=json.load(sys.stdin); print('yes' if d.get('errors') else 'no')" 2>/dev/null)
 
   clear
-  echo "🏢 ON-PREM KAFKA INGEST | MODE: $MODE | STATE: $STATE | BATCH SIZE: $LOGS_PER_REQUEST | HTTP: $HTTP_STATUS"
-  echo "API: POST $BULK_URL"
-  echo "--------------------------------------------------------------------------------"
-  printf "%-28s | %-15s | %-18s | %-40s\n" "SERVICE" "TEAM" "KAFKA.TOPIC.ID" "LATEST LOG MESSAGE"
-  echo "--------------------------------------------------------------------------------"
+  STATE_COLOR=$T_GREEN
+  [[ "$STATE" == "CRITICAL" ]] && STATE_COLOR=$T_RED
+  HTTP_COLOR=$T_GREEN
+  [[ "$HTTP_STATUS" != "200" ]] && HTTP_COLOR=$T_RED
+  echo "${T_BOLD}${T_MAGENTA}🏢 ON-PREM KAFKA INGEST${T_RESET} ${T_DIM}│${T_RESET} MODE ${T_BOLD}$MODE${T_RESET} ${T_DIM}│${T_RESET} STATE ${STATE_COLOR}${T_BOLD}$STATE${T_RESET} ${T_DIM}│${T_RESET} BATCH ${T_MAGENTA}$LOGS_PER_REQUEST${T_RESET} ${T_DIM}│${T_RESET} HTTP ${HTTP_COLOR}${T_BOLD}$HTTP_STATUS${T_RESET}"
+  echo "${T_DIM}API${T_RESET}  ${T_BLUE}POST${T_RESET} ${T_CYAN}$BULK_URL${T_RESET}"
+  term_hr
+  printf "${T_BOLD}%-28s${T_RESET} ${T_DIM}│${T_RESET} ${T_BOLD}%-15s${T_RESET} ${T_DIM}│${T_RESET} ${T_BOLD}%-18s${T_RESET} ${T_DIM}│${T_RESET} ${T_BOLD}%-40s${T_RESET}\n" "SERVICE" "TEAM" "KAFKA.TOPIC.ID" "LATEST LOG MESSAGE"
+  term_hr
   for s in "${SERVICES[@]}"; do
-    printf "%-28s | %-15s | %-18s | %-40s\n" "$s" "$TEAM_MAP[$s]" "${SAMPLES_TOPIC[$s]:--}" "${SAMPLES[$s]}"
+    printf "${T_DIM}%-28s${T_RESET} ${T_DIM}│${T_RESET} ${T_CYAN}%-15s${T_RESET} ${T_DIM}│${T_RESET} ${T_YELLOW}%-18s${T_RESET} ${T_DIM}│${T_RESET} %s\n" "$s" "$TEAM_MAP[$s]" "${SAMPLES_TOPIC[$s]:--}" "${SAMPLES[$s]}"
   done
 
   if [[ "$HTTP_STATUS" != "200" ]]; then
-    echo "\n❌ HTTP ERROR ($HTTP_STATUS): $BODY"
+    echo ""
+    echo "${T_RED}${T_BOLD}✗ HTTP $HTTP_STATUS${T_RESET}"
+    echo "${T_DIM}$BODY${T_RESET}"
   elif [[ "$HAS_ERRORS" == "yes" ]]; then
     FIRST_ERR=$(echo "$BODY" | python3 -c "
 import sys,json
@@ -146,7 +162,9 @@ for item in d.get('items',[]):
       print(json.dumps(op['error'], indent=2))
       sys.exit()
 ")
-    echo "\n❌ BULK ERRORS (first): $FIRST_ERR"
+    echo ""
+    echo "${T_RED}${T_BOLD}✗ Bulk errors (first item)${T_RESET}"
+    echo "${T_YELLOW}$FIRST_ERR${T_RESET}"
   fi
   
   sleep 1
