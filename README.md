@@ -183,6 +183,18 @@ After data is in a wired stream, you can:
 | `--logs-per-request N` | Number of log documents per bulk request (default: 100). |
 | `--preferred-schema otel \| ecs` | Wired stream schema: `otel` (default) or `ecs`. |
 
+### Claude Code Skills (Slash Commands)
+
+If you are using [Claude Code](https://claude.com/claude-code), three slash commands are available to control the demo:
+
+| Command | Description |
+|---------|-------------|
+| `/normal-activity` | Kills any running script instances, then starts both scripts in normal (healthy) mode. |
+| `/abnormal-activity` | Kills any running script instances, then starts both scripts in failure mode (`--mode failure`). |
+| `/kill-demo` | Kills any running script instances. |
+
+These replace the manual terminal workflow described above — no need to juggle multiple terminals or remember flags.
+
 ### File layout
 
 | File | Purpose |
