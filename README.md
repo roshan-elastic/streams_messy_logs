@@ -4,6 +4,8 @@
 
 This repository helps you send **synthetic logs** into Elastic: AWS-style logs (as if collected by CloudWatch) and on-premises-style logs from a variety of services and infrastructure. Use it to demo [Elastic Streams](https://www.elastic.co/docs/solutions/observability/streams/wired-streams), partitioning, processing, and AI-assisted troubleshooting without touching production systems.
 
+> **GCP variant available:** A Google Cloud Platform version of this demo (Cloud Logging, GKE, Cloud Functions, Cloud Armor, etc.) lives in the **[`gcp/`](gcp/README-GCP.md)** folder. See **[gcp/README-GCP.md](gcp/README-GCP.md)** for setup and usage.
+
 The following diagram shows how data flows from the two simulated sources into Elastic wired streams:
 
 ![Architecture](Architecture.png)
