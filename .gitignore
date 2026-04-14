@@ -1,2 +1,6 @@
 # Local Elastic credentials - do not commit
 elastic.env
+
+# Python bytecode/cache
+__pycache__/
+*.py[cod]
