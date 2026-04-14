@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8">
+<title>GCP Architecture Diagram</title>
+<style>
+body { margin:0; padding:8px; background:#ffffff; }
+svg { width:100%; height:auto; display:block; }
+</style></head><body>
+<svg viewBox="0 0 1500 840" xmlns="http://www.w3.org/2000/svg" font-family="sans-serif">
+<defs>
+  <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+    <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </marker>
+</defs>
+
+<!-- WEB STORE HEADER -->
+<text x="750" y="30" text-anchor="middle" font-size="20" font-weight="500" fill="#2C2C2A">Web Store</text>
+<rect x="556" y="42" width="388" height="38" rx="6" fill="none" stroke="#888780" stroke-width="1" stroke-dasharray="5 3"/>
+<rect x="566" y="50" width="96" height="22" rx="4" fill="none" stroke="#888780" stroke-width="0.8"/>
+<text x="614" y="65" text-anchor="middle" font-size="11" fill="#5F5E5A">Web Browser</text>
+<rect x="672" y="50" width="96" height="22" rx="4" fill="none" stroke="#888780" stroke-width="0.8"/>
+<text x="720" y="65" text-anchor="middle" font-size="11" fill="#5F5E5A">Android App</text>
+<rect x="778" y="50" width="80" height="22" rx="4" fill="none" stroke="#888780" stroke-width="0.8"/>
+<text x="818" y="65" text-anchor="middle" font-size="11" fill="#5F5E5A">iOS App</text>
+<line x1="750" y1="80" x2="1010" y2="115" stroke="#888780" stroke-width="1.5" marker-end="url(#arr)"/>
+
+<!-- ON-PREM CONTAINER -->
+<rect x="8" y="100" width="678" height="690" rx="10" fill="#F8F6FF" stroke="#7c3aed" stroke-width="1.5" stroke-dasharray="6 3"/>
+<text x="44" y="126" font-size="18" font-weight="500" fill="#7c3aed">On Prem</text>
+
+<rect x="286" y="142" width="218" height="22" rx="4" fill="none" stroke="#b8b0e8" stroke-width="0.8" stroke-dasharray="4 2"/>
+<text x="395" y="157" text-anchor="middle" font-size="10" fill="#7c3aed">Team: Network-Ops</text>
+<rect x="314" y="170" width="162" height="34" rx="5" fill="#ede9fc" stroke="#9c7ee8" stroke-width="0.8"/>
+<text x="395" y="191" text-anchor="middle" font-size="12" font-weight="500" fill="#4c3da6">Fortigate Firewall</text>
+<line x1="395" y1="204" x2="395" y2="224" stroke="#7c3aed" stroke-width="1.5" marker-end="url(#arr)"/>
+<rect x="314" y="224" width="162" height="34" rx="5" fill="#ede9fc" stroke="#9c7ee8" stroke-width="0.8"/>
+<text x="395" y="245" text-anchor="middle" font-size="12" font-weight="500" fill="#4c3da6">Cisco Nexus Core</text>
+<line x1="395" y1="258" x2="395" y2="278" stroke="#7c3aed" stroke-width="1.5" marker-end="url(#arr)"/>
+<rect x="314" y="278" width="162" height="34" rx="5" fill="#ede9fc" stroke="#9c7ee8" stroke-width="0.8"/>
+<text x="395" y="299" text-anchor="middle" font-size="12" font-weight="500" fill="#4c3da6">F5 Load Balancer</text>
+<line x1="395" y1="312" x2="395" y2="356" stroke="#7c3aed" stroke-width="1.5" marker-end="url(#arr)"/>
+
+<rect x="286" y="338" width="218" height="22" rx="4" fill="none" stroke="#b8b0e8" stroke-width="0.8" stroke-dasharray="4 2"/>
+<text x="395" y="353" text-anchor="middle" font-size="10" fill="#7c3aed">Team: Infra-Cloud</text>
+<rect x="314" y="362" width="162" height="34" rx="5" fill="#ede9fc" stroke="#9c7ee8" stroke-width="0.8"/>
+<text x="395" y="383" text-anchor="middle" font-size="12" font-weight="500" fill="#4c3da6">VMware vCenter</text>
+<line x1="395" y1="396" x2="395" y2="416" stroke="#7c3aed" stroke-width="1.5" marker-end="url(#arr)"/>
+<rect x="314" y="416" width="162" height="34" rx="5" fill="#ede9fc" stroke="#9c7ee8" stroke-width="0.8"/>
+<text x="395" y="437" text-anchor="middle" font-size="12" font-weight="500" fill="#4c3da6">Active Directory</text>
+
+<rect x="16" y="338" width="185" height="22" rx="4" fill="none" stroke="#b8b0e8" stroke-width="0.8" stroke-dasharray="4 2"/>
+<text x="108" y="353" text-anchor="middle" font-size="10" fill="#7c3aed">Team: Data-Platform</text>
+<rect x="16" y="362" width="162" height="34" rx="5" fill="#ede9fc" stroke="#9c7ee8" stroke-width="0.8"/>
+<text x="97" y="383" text-anchor="middle" font-size="12" font-weight="500" fill="#4c3da6">Oracle Financials</text>
+<rect x="16" y="410" width="162" height="34" rx="5" fill="#ede9fc" stroke="#9c7ee8" stroke-width="0.8"/>
+<text x="97" y="431" text-anchor="middle" font-size="12" font-weight="500" fill="#4c3da6">Legacy ERP</text>
+<line x1="314" y1="379" x2="178" y2="379" stroke="#7c3aed" stroke-width="1" marker-end="url(#arr)"/>
+
+<rect x="518" y="338" width="160" height="22" rx="4" fill="none" stroke="#b8b0e8" stroke-width="0.8" stroke-dasharray="4 2"/>
+<text x="598" y="353" text-anchor="middle" font-size="10" fill="#7c3aed">Team: App-Middleware</text>
+<rect x="518" y="362" width="160" height="34" rx="5" fill="#ede9fc" stroke="#9c7ee8" stroke-width="0.8"/>
+<text x="598" y="383" text-anchor="middle" font-size="12" font-weight="500" fill="#4c3da6">WebSphere MQ</text>
+<line x1="476" y1="379" x2="517" y2="379" stroke="#7c3aed" stroke-width="1" marker-end="url(#arr)"/>
+
+<rect x="518" y="408" width="160" height="22" rx="4" fill="none" stroke="#b8b0e8" stroke-width="0.8" stroke-dasharray="4 2"/>
+<text x="598" y="423" text-anchor="middle" font-size="10" fill="#7c3aed">Team: Mainframe-Core</text>
+<rect x="518" y="432" width="160" height="34" rx="5" fill="#ede9fc" stroke="#9c7ee8" stroke-width="0.8"/>
+<text x="598" y="453" text-anchor="middle" font-size="12" font-weight="500" fill="#4c3da6">Mainframe: DB2 z/OS</text>
+
+<rect x="240" y="490" width="138" height="34" rx="5" fill="#ede9fc" stroke="#9c7ee8" stroke-width="0.8"/>
+<text x="309" y="511" text-anchor="middle" font-size="12" font-weight="500" fill="#4c3da6">NetApp Storage</text>
+<rect x="392" y="490" width="144" height="34" rx="5" fill="#ede9fc" stroke="#9c7ee8" stroke-width="0.8"/>
+<text x="464" y="511" text-anchor="middle" font-size="12" font-weight="500" fill="#4c3da6">Linux JumpHost</text>
+<line x1="395" y1="450" x2="330" y2="489" stroke="#7c3aed" stroke-width="1" marker-end="url(#arr)"/>
+<line x1="415" y1="450" x2="450" y2="489" stroke="#7c3aed" stroke-width="1" marker-end="url(#arr)"/>
+
+<!-- Logs section -->
+<rect x="14" y="548" width="662" height="136" rx="8" fill="#fff0f8" stroke="#e879b0" stroke-width="1.2" stroke-dasharray="5 3"/>
+<rect x="46" y="566" width="150" height="32" rx="5" fill="none" stroke="#e879b0" stroke-width="0.8"/>
+<text x="121" y="586" text-anchor="middle" font-size="11" fill="#be185d">Logs for team A</text>
+<rect x="222" y="566" width="150" height="32" rx="5" fill="none" stroke="#e879b0" stroke-width="0.8"/>
+<text x="297" y="586" text-anchor="middle" font-size="11" fill="#be185d">Logs for team B</text>
+<rect x="398" y="566" width="150" height="32" rx="5" fill="none" stroke="#e879b0" stroke-width="0.8"/>
+<text x="473" y="586" text-anchor="middle" font-size="11" fill="#be185d">Logs for team C</text>
+<line x1="121" y1="598" x2="232" y2="622" stroke="#e879b0" stroke-width="1.2" marker-end="url(#arr)"/>
+<line x1="297" y1="598" x2="297" y2="622" stroke="#e879b0" stroke-width="1.2" marker-end="url(#arr)"/>
+<line x1="473" y1="598" x2="360" y2="622" stroke="#e879b0" stroke-width="1.2" marker-end="url(#arr)"/>
+<rect x="196" y="622" width="200" height="40" rx="7" fill="none" stroke="#e879b0" stroke-width="1.2"/>
+<text x="296" y="646" text-anchor="middle" font-size="13" font-weight="500" fill="#be185d">Kafka Bus</text>
+
+<!-- GCP CLOUD CONTAINER -->
+<rect x="710" y="100" width="780" height="600" rx="10" fill="#FFF8F0" stroke="#d97706" stroke-width="1.5" stroke-dasharray="6 3"/>
+<text x="1476" y="126" text-anchor="end" font-size="18" font-weight="500" fill="#d97706">GCP Cloud</text>
+
+<!-- App-Dev-Frontend -->
+<rect x="860" y="118" width="300" height="106" rx="7" fill="none" stroke="#d97706" stroke-width="0.9" stroke-dasharray="5 2"/>
+<text x="874" y="134" font-size="10" fill="#d97706">App-Dev-Frontend</text>
+<rect x="872" y="140" width="118" height="34" rx="5" fill="#FDE68A" stroke="#d97706" stroke-width="0.8"/>
+<text x="931" y="161" text-anchor="middle" font-size="12" font-weight="500" fill="#78350f">Cloud CDN</text>
+<rect x="1004" y="140" width="142" height="34" rx="5" fill="#FDE68A" stroke="#d97706" stroke-width="0.8"/>
+<text x="1075" y="161" text-anchor="middle" font-size="12" font-weight="500" fill="#78350f">Cloud API Gateway</text>
+<line x1="990" y1="157" x2="1003" y2="157" stroke="#d97706" stroke-width="1" marker-end="url(#arr)"/>
+<line x1="1075" y1="174" x2="1075" y2="226" stroke="#d97706" stroke-width="1.5" marker-end="url(#arr)"/>
+
+<!-- App-Dev-Checkout -->
+<rect x="984" y="226" width="300" height="174" rx="7" fill="none" stroke="#d97706" stroke-width="0.9" stroke-dasharray="5 2"/>
+<text x="998" y="242" font-size="10" fill="#d97706">App-Dev-Checkout</text>
+<rect x="994" y="250" width="130" height="40" rx="5" fill="#FDE68A" stroke="#d97706" stroke-width="0.8"/>
+<text x="1059" y="266" text-anchor="middle" font-size="11" font-weight="500" fill="#78350f">GKE: Checkout Svc</text>
+<text x="1059" y="282" text-anchor="middle" font-size="10" fill="#92400e">(Kubernetes)</text>
+<rect x="1142" y="250" width="130" height="40" rx="5" fill="#FDE68A" stroke="#d97706" stroke-width="0.8"/>
+<text x="1207" y="266" text-anchor="middle" font-size="11" font-weight="500" fill="#78350f">GKE: Auth Svc</text>
+<text x="1207" y="282" text-anchor="middle" font-size="10" fill="#92400e">(Kubernetes)</text>
+<rect x="1142" y="308" width="130" height="40" rx="5" fill="#BFDBFE" stroke="#3b82f6" stroke-width="0.8"/>
+<text x="1207" y="324" text-anchor="middle" font-size="11" font-weight="500" fill="#1e3a8a">Firestore</text>
+<text x="1207" y="338" text-anchor="middle" font-size="10" fill="#1e40af">Sessions</text>
+<line x1="1207" y1="290" x2="1207" y2="307" stroke="#3b82f6" stroke-width="1" marker-end="url(#arr)"/>
+<line x1="994" y1="270" x2="920" y2="276" stroke="#d97706" stroke-width="1" marker-end="url(#arr)"/>
+
+<!-- Arrow: App-Dev-Checkout → OTel Collectors -->
+<path d="M1284 313 L1340 313 L1340 295 L1359 295" fill="none" stroke="#2563EB" stroke-width="1.5" marker-end="url(#arr)"/>
+<text x="1292" y="306" font-size="9" fill="#2563EB">metrics/traces</text>
+
+<!-- Arrow: Cloud Functions → F5 Load Balancer -->
+<path d="M728 270 L695 270 L695 295 L476 295" fill="none" stroke="#d97706" stroke-width="1.5" stroke-dasharray="5 3" marker-end="url(#arr)"/>
+
+<!-- FinTech-Ops -->
+<rect x="718" y="226" width="256" height="174" rx="7" fill="none" stroke="#d97706" stroke-width="0.9" stroke-dasharray="5 2"/>
+<text x="732" y="242" font-size="10" fill="#d97706">FinTech-Ops</text>
+<rect x="728" y="250" width="166" height="40" rx="5" fill="#FDE68A" stroke="#d97706" stroke-width="0.8"/>
+<text x="811" y="266" text-anchor="middle" font-size="11" font-weight="500" fill="#78350f">Cloud Functions:</text>
+<text x="811" y="280" text-anchor="middle" font-size="11" font-weight="500" fill="#78350f">Payment</text>
+<rect x="728" y="308" width="166" height="40" rx="5" fill="#FDE68A" stroke="#d97706" stroke-width="0.8"/>
+<text x="811" y="333" text-anchor="middle" font-size="12" font-weight="500" fill="#78350f">Pub/Sub: Order Topic</text>
+<line x1="811" y1="290" x2="811" y2="307" stroke="#d97706" stroke-width="1" marker-end="url(#arr)"/>
+
+<!-- Cloud Monitoring + Cloud Logging -->
+<rect x="718" y="432" width="190" height="44" rx="7" fill="#DBEAFE" stroke="#3b82f6" stroke-width="1"/>
+<text x="813" y="450" text-anchor="middle" font-size="12" font-weight="500" fill="#1e3a8a">Cloud Monitoring</text>
+<text x="813" y="466" text-anchor="middle" font-size="10" fill="#1e40af">Metrics + Traces</text>
+<rect x="926" y="432" width="190" height="44" rx="7" fill="#DBEAFE" stroke="#3b82f6" stroke-width="1"/>
+<text x="1021" y="450" text-anchor="middle" font-size="12" font-weight="500" fill="#1e3a8a">Cloud Logging</text>
+<text x="1021" y="466" text-anchor="middle" font-size="10" fill="#1e40af">All GCP service logs</text>
+
+<!-- EDOT Collector wide bar -->
+<rect x="718" y="510" width="756" height="56" rx="8" fill="#EFF6FF" stroke="#2563EB" stroke-width="1.5"/>
+<text x="1096" y="534" text-anchor="middle" font-size="13" font-weight="500" fill="#1e3a8a">EDOT Cloud Forwarder for GCP</text>
+<text x="1096" y="550" text-anchor="middle" font-size="11" fill="#1e40af">(OpenTelemetry Collector — spans entire GCP boundary)</text>
+<line x1="813" y1="476" x2="813" y2="509" stroke="#2563EB" stroke-width="1.5" marker-end="url(#arr)"/>
+<line x1="1021" y1="476" x2="1021" y2="509" stroke="#2563EB" stroke-width="1.5" marker-end="url(#arr)"/>
+
+<!-- OTel Collectors -->
+<text x="1362" y="228" font-size="9" fill="#2563EB">Collect logs, metrics,</text>
+<text x="1362" y="240" font-size="9" fill="#2563EB">traces via OTel Collectors</text>
+<rect x="1360" y="248" width="130" height="60" rx="7" fill="none" stroke="#2563EB" stroke-width="1.2"/>
+<text x="1425" y="273" text-anchor="middle" font-size="11" font-weight="500" fill="#1e3a8a">OpenTelemetry</text>
+<text x="1425" y="289" text-anchor="middle" font-size="11" font-weight="500" fill="#1e3a8a">Collectors</text>
+
+<!-- ELASTIC BOX — outside GCP, below it -->
+<rect x="710" y="716" width="780" height="72" rx="8" fill="#EFF6FF" stroke="#93C5FD" stroke-width="1.2"/>
+<rect x="838" y="730" width="155" height="44" rx="7" fill="white" stroke="#2C2C2A" stroke-width="1.2"/>
+<text x="915" y="750" text-anchor="middle" font-size="13" font-weight="500" fill="#1D6FA4">/logs</text>
+<text x="915" y="766" text-anchor="middle" font-size="12" fill="#2C2C2A">Streams</text>
+<rect x="1180" y="730" width="155" height="44" rx="7" fill="white" stroke="#2C2C2A" stroke-width="1.2"/>
+<text x="1257" y="752" text-anchor="middle" font-size="13" font-weight="500" fill="#2C2C2A">Classic Streams</text>
+
+<!-- EDOT → /logs Streams -->
+<line x1="907" y1="566" x2="907" y2="729" stroke="#2563EB" stroke-width="1.5" marker-end="url(#arr)"/>
+
+<!-- OTel Collectors → Classic Streams -->
+<path d="M1425 308 L1425 752 L1336 752" fill="none" stroke="#2563EB" stroke-width="1.5" stroke-dasharray="5 3" marker-end="url(#arr)"/>
+
+<text x="1480" y="830" text-anchor="end" font-size="12" font-weight="500" fill="#1D6FA4">elastic</text>
+</svg>
+</body></html>
