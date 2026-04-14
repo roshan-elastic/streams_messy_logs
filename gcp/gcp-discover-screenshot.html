@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>GCP Logs — Elastic Discover</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #fff; color: #343741; font-size: 13px; -webkit-font-smoothing: antialiased; }
+  .wrapper { max-width: 1340px; margin: 0 auto; border: 1px solid #D3DAE6; border-radius: 6px; overflow: hidden; }
+
+  /* ---- toolbar ---- */
+  .toolbar { display: flex; align-items: center; justify-content: space-between; padding: 8px 12px; border-bottom: 1px solid #D3DAE6; background: #FAFBFD; }
+  .tab-group { display: flex; gap: 0; }
+  .tab { padding: 5px 14px; border: 1px solid #D3DAE6; font-size: 13px; font-weight: 500; cursor: default; background: #fff; }
+  .tab.active { background: #006BB4; color: #fff; border-color: #006BB4; border-radius: 4px 0 0 4px; }
+  .tab:last-child { border-radius: 0 4px 4px 0; }
+  .toolbar-right { display: flex; align-items: center; gap: 16px; color: #69707D; font-size: 12px; }
+
+  /* ---- table ---- */
+  table { width: 100%; border-collapse: collapse; }
+  th { position: sticky; top: 0; background: #F5F7FA; text-align: left; padding: 8px 12px; font-size: 12px; font-weight: 600; color: #69707D; border-bottom: 2px solid #D3DAE6; white-space: nowrap; }
+  th .icon { display: inline-block; width: 14px; height: 14px; vertical-align: -2px; margin-right: 4px; }
+  th .kw { display: inline-block; background: #E0E5EE; color: #535966; font-size: 9px; font-weight: 700; padding: 1px 4px; border-radius: 3px; margin-right: 4px; vertical-align: 1px; }
+  td { padding: 7px 12px; border-bottom: 1px solid #EDF0F5; font-size: 12.5px; vertical-align: top; font-family: 'SF Mono', 'Roboto Mono', 'Source Code Pro', Menlo, monospace; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  tr:hover { background: #F5F7FA; }
+
+  .expand { color: #006BB4; font-size: 11px; cursor: default; padding-right: 4px; width: 24px; }
+  .ts { color: #343741; }
+  .body { max-width: 280px; }
+  .src { max-width: 120px; }
+  .team { max-width: 140px; }
+  .svc { max-width: 180px; }
+  .stream { max-width: 200px; }
+
+  tr:nth-child(even) { background: #FAFBFD; }
+  tr:nth-child(even):hover { background: #F0F2F5; }
+</style>
+</head>
+<body>
+<div class="wrapper">
+
+  <!-- toolbar -->
+  <div class="toolbar">
+    <div class="tab-group">
+      <div class="tab active">Columns</div>
+      <div class="tab">Summary</div>
+    </div>
+    <div class="toolbar-right">
+      <span>📋 Columns 6</span>
+      <span>↕ Sort fields</span>
+      <span>⌨</span>
+      <span>⚙</span>
+      <span>⧉</span>
+    </div>
+  </div>
+
+  <!-- data table -->
+  <table>
+    <thead>
+      <tr>
+        <th></th>
+        <th><span class="icon">📅</span> @timestamp</th>
+        <th><span class="icon">⊙</span> attributes.body.text</th>
+        <th><span class="icon">⊙</span> attributes.source</th>
+        <th><span class="kw">k</span> attributes.team-name</th>
+        <th><span class="kw">k</span> resource.attributes.service.name</th>
+        <th><span class="kw">k</span> stream.name</th>
+      </tr>
+    </thead>
+    <tbody id="rows"></tbody>
+  </table>
+
+</div>
+
+<script>
+// Mixed GCP cloud + on-prem DB2 log rows
+// Each row: [timestamp, body.text, source, team-name, service.name, stream.name]
+const rows = [
+  // ---- batch @ :40 — interleaved GCP cloud + DB2 on-prem ----
+  ["2026-02-23T17:59:40.000Z", "[CLOUD-FUNC] START req=AA61CFF4 function=payment-gateway",           "gcp_cloud_logging", "",               "",                     "logs.gcp-cloud-logs"],
+  ["2026-02-23T17:59:40.000Z", "[DB2-ZOS] LPAR-SEC-04 Commit successful for plan DSNTEP2 (TX=A3F1B2)","logs team",          "Mainframe-Core", "onprem-mainframe-db2", "logs.on-prem-logs-team...."],
+  ["2026-02-23T17:59:40.000Z", "[VPC-FLOW] src=10.128.0.34 dst=10.50.1.20 proto=TCP dport=1521 ...",  "gcp_cloud_logging", "",               "",                     "logs.gcp-cloud-logs"],
+  ["2026-02-23T17:59:40.000Z", "[DB2-ZOS] LPAR-SEC-04 Commit successful for plan DSNTEP2 (TX=7C09E4)","logs team",          "Mainframe-Core", "onprem-mainframe-db2", "logs.on-prem-logs-team...."],
+  ["2026-02-23T17:59:40.000Z", "[VPC-FLOW] src=10.128.0.112 dst=10.50.1.20 proto=TCP dport=1521 ...", "gcp_cloud_logging", "",               "",                     "logs.gcp-cloud-logs"],
+  ["2026-02-23T17:59:40.000Z", "[CLOUD-ARMOR] ACTION: ALLOWED SOURCE_IP: 192.168.1.22 RULE: defa...", "gcp_cloud_logging", "",               "",                     "logs.gcp-cloud-logs"],
+  ["2026-02-23T17:59:40.000Z", "[DB2-ZOS] LPAR-SEC-04 Commit successful for plan DSNTEP2 (TX=D82A6F)","logs team",          "Mainframe-Core", "onprem-mainframe-db2", "logs.on-prem-logs-team...."],
+  ["2026-02-23T17:59:40.000Z", "[CLOUD-ARMOR] ACTION: ALLOWED SOURCE_IP: 192.168.1.73 RULE: defa...", "gcp_cloud_logging", "",               "",                     "logs.gcp-cloud-logs"],
+  ["2026-02-23T17:59:40.000Z", "[VPC-FLOW] src=10.128.0.7 dst=10.50.1.20 proto=TCP dport=1521 ...",   "gcp_cloud_logging", "",               "",                     "logs.gcp-cloud-logs"],
+  ["2026-02-23T17:59:40.000Z", "[CLOUD-FUNC] START req=68F8DB36 function=payment-gateway",            "gcp_cloud_logging", "",               "",                     "logs.gcp-cloud-logs"],
+  ["2026-02-23T17:59:40.000Z", "[DB2-ZOS] LPAR-SEC-04 Commit successful for plan DSNTEP2 (TX=1B5E03)","logs team",          "Mainframe-Core", "onprem-mainframe-db2", "logs.on-prem-logs-team...."],
+  ["2026-02-23T17:59:40.000Z", "[CLOUD-ARMOR] ACTION: ALLOWED SOURCE_IP: 192.168.1.66 RULE: defa...", "gcp_cloud_logging", "",               "",                     "logs.gcp-cloud-logs"],
+  ["2026-02-23T17:59:40.000Z", "[CLOUD-ARMOR] ACTION: ALLOWED SOURCE_IP: 192.168.1.174 RULE: def...", "gcp_cloud_logging", "",               "",                     "logs.gcp-cloud-logs"],
+  ["2026-02-23T17:59:40.000Z", "[VPC-FLOW] src=10.128.0.58 dst=10.50.1.20 proto=TCP dport=1521 ...", "gcp_cloud_logging", "",               "",                     "logs.gcp-cloud-logs"],
+  // ---- batch @ :35 ----
+  ["2026-02-23T17:59:35.000Z", "[CLOUD-FUNC] START req=26E5B237 function=payment-gateway",            "gcp_cloud_logging", "",               "",                     "logs.gcp-cloud-logs"],
+  ["2026-02-23T17:59:35.000Z", "[DB2-ZOS] LPAR-SEC-04 Commit successful for plan DSNTEP2 (TX=E9C7D1)","logs team",          "Mainframe-Core", "onprem-mainframe-db2", "logs.on-prem-logs-team...."],
+  ["2026-02-23T17:59:35.000Z", "[VPC-FLOW] src=10.128.0.201 dst=10.50.1.20 proto=TCP dport=1521 ...", "gcp_cloud_logging", "",               "",                     "logs.gcp-cloud-logs"],
+  ["2026-02-23T17:59:35.000Z", "[CLOUD-ARMOR] ACTION: ALLOWED SOURCE_IP: 192.168.1.64 RULE: defa...", "gcp_cloud_logging", "",               "",                     "logs.gcp-cloud-logs"],
+  ["2026-02-23T17:59:35.000Z", "[DB2-ZOS] LPAR-SEC-04 Commit successful for plan DSNTEP2 (TX=4FA820)","logs team",          "Mainframe-Core", "onprem-mainframe-db2", "logs.on-prem-logs-team...."],
+  ["2026-02-23T17:59:35.000Z", "[CLOUD-FUNC] START req=5EAD3DD8 function=payment-gateway",            "gcp_cloud_logging", "",               "",                     "logs.gcp-cloud-logs"],
+  ["2026-02-23T17:59:35.000Z", "[VPC-FLOW] src=10.128.0.143 dst=10.50.1.20 proto=TCP dport=1521 ...", "gcp_cloud_logging", "",               "",                     "logs.gcp-cloud-logs"],
+  ["2026-02-23T17:59:35.000Z", "[DB2-ZOS] LPAR-SEC-04 Commit successful for plan DSNTEP2 (TX=63D19B)","logs team",          "Mainframe-Core", "onprem-mainframe-db2", "logs.on-prem-logs-team...."],
+  ["2026-02-23T17:59:35.000Z", "[CLOUD-FUNC] START req=921692CC function=payment-gateway",            "gcp_cloud_logging", "",               "",                     "logs.gcp-cloud-logs"],
+  ["2026-02-23T17:59:35.000Z", "[CLOUD-ARMOR] ACTION: ALLOWED SOURCE_IP: 192.168.1.171 RULE: def...", "gcp_cloud_logging", "",               "",                     "logs.gcp-cloud-logs"],
+  ["2026-02-23T17:59:35.000Z", "[CLOUD-FUNC] START req=D1915A92 function=payment-gateway",            "gcp_cloud_logging", "",               "",                     "logs.gcp-cloud-logs"],
+  ["2026-02-23T17:59:35.000Z", "[VPC-FLOW] src=10.128.0.15 dst=10.50.1.20 proto=TCP dport=1521 ...",  "gcp_cloud_logging", "",               "",                     "logs.gcp-cloud-logs"],
+];
+
+const tbody = document.getElementById("rows");
+rows.forEach(([ts, body, src, team, svc, stream]) => {
+  const tr = document.createElement("tr");
+  tr.innerHTML =
+    `<td class="expand">↗</td>` +
+    `<td class="ts">${ts}</td>` +
+    `<td class="body">${body}</td>` +
+    `<td class="src">${src}</td>` +
+    `<td class="team">${team}</td>` +
+    `<td class="svc">${svc}</td>` +
+    `<td class="stream">${stream}</td>`;
+  tbody.appendChild(tr);
+});
+</script>
+</body>
+</html>

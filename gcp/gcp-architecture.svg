@@ -1,0 +1,158 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 750" font-family="'Segoe UI', Arial, sans-serif">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#555"/>
+    </marker>
+    <marker id="arrow-blue" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#4285F4"/>
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="600" y="30" text-anchor="middle" font-size="20" font-weight="bold" fill="#333">Web Store</text>
+  <text x="480" y="50" font-size="11" fill="#888">🌐 Web Browser</text>
+  <text x="580" y="50" font-size="11" fill="#888">📱 Android App</text>
+  <text x="680" y="50" font-size="11" fill="#888">📱 iOS App</text>
+
+  <!-- ==================== ON-PREM SECTION ==================== -->
+  <rect x="20" y="70" width="480" height="580" rx="12" fill="#FFF8F0" stroke="#E0D0C0" stroke-width="2" stroke-dasharray="8,4"/>
+  <text x="40" y="95" font-size="16" font-weight="bold" fill="#8B6914">🏢 On Prem</text>
+
+  <!-- Team Network-Ops -->
+  <rect x="35" y="110" width="210" height="120" rx="6" fill="#FFF0F0" stroke="#E8C0C0" stroke-width="1"/>
+  <text x="45" y="128" font-size="10" fill="#AA6666">👥 Team Network-Ops</text>
+  <rect x="45" y="135" width="130" height="22" rx="4" fill="#FFE0E0" stroke="#D4A0A0"/>
+  <text x="55" y="150" font-size="10" fill="#993333">🔥 Fortigate Firewall</text>
+  <rect x="45" y="163" width="130" height="22" rx="4" fill="#FFE0E0" stroke="#D4A0A0"/>
+  <text x="55" y="178" font-size="10" fill="#993333">🔌 Cisco Nexus Core</text>
+  <rect x="45" y="191" width="130" height="22" rx="4" fill="#FFE0E0" stroke="#D4A0A0"/>
+  <text x="55" y="206" font-size="10" fill="#993333">⚖️ F5 Load Balancer</text>
+
+  <!-- Team Data-Platform -->
+  <rect x="35" y="240" width="210" height="100" rx="6" fill="#F0F0FF" stroke="#C0C0E8" stroke-width="1"/>
+  <text x="45" y="258" font-size="10" fill="#6666AA">👥 Team Data-Platform</text>
+  <rect x="45" y="265" width="140" height="22" rx="4" fill="#E0E0FF" stroke="#A0A0D4"/>
+  <text x="55" y="280" font-size="10" fill="#333399">🗄️ Oracle Financials</text>
+  <rect x="45" y="293" width="140" height="22" rx="4" fill="#E0E0FF" stroke="#A0A0D4"/>
+  <text x="55" y="308" font-size="10" fill="#333399">📦 Legacy ERP</text>
+
+  <!-- Team Infra-Cloud -->
+  <rect x="255" y="240" width="235" height="100" rx="6" fill="#F5F0FF" stroke="#D0C0E8" stroke-width="1"/>
+  <text x="265" y="258" font-size="10" fill="#7744AA">👥 Team Infra-Cloud</text>
+  <rect x="265" y="265" width="140" height="22" rx="4" fill="#EBE0FF" stroke="#B0A0D4"/>
+  <text x="275" y="280" font-size="10" fill="#553399">🖥️ VMware vCenter</text>
+  <rect x="265" y="293" width="140" height="22" rx="4" fill="#EBE0FF" stroke="#B0A0D4"/>
+  <text x="275" y="308" font-size="10" fill="#553399">🔑 Active Directory</text>
+
+  <!-- Team App-Middleware -->
+  <rect x="255" y="350" width="235" height="80" rx="6" fill="#FFF5E0" stroke="#E8D4A0" stroke-width="1"/>
+  <text x="265" y="368" font-size="10" fill="#AA8833">👥 Team App-Middleware</text>
+  <rect x="265" y="375" width="140" height="22" rx="4" fill="#FFECC0" stroke="#D4C090"/>
+  <text x="275" y="390" font-size="10" fill="#886622">📨 WebSphere MQ</text>
+
+  <!-- Team Mainframe-Core -->
+  <rect x="255" y="110" width="235" height="80" rx="6" fill="#F0FFF0" stroke="#C0E8C0" stroke-width="1"/>
+  <text x="265" y="128" font-size="10" fill="#448844">👥 Team Mainframe-Core</text>
+  <rect x="265" y="135" width="160" height="22" rx="4" fill="#E0FFE0" stroke="#A0D4A0"/>
+  <text x="275" y="150" font-size="10" fill="#226622">🖥️ Mainframe DB2 z/OS</text>
+
+  <!-- Standalone on-prem -->
+  <rect x="45" y="355" width="130" height="22" rx="4" fill="#E8E8FF" stroke="#B0B0D4"/>
+  <text x="55" y="370" font-size="10" fill="#444488">💾 NetApp Storage</text>
+  <rect x="45" y="385" width="130" height="22" rx="4" fill="#E8E8FF" stroke="#B0B0D4"/>
+  <text x="55" y="400" font-size="10" fill="#444488">🐧 Linux Jumphost</text>
+
+  <!-- Logs for Teams -->
+  <rect x="45" y="430" width="100" height="22" rx="4" fill="#FFD0D0" stroke="#CC9999"/>
+  <text x="52" y="444" font-size="9" fill="#993333">Logs for Team A</text>
+  <rect x="160" y="430" width="100" height="22" rx="4" fill="#D0D0FF" stroke="#9999CC"/>
+  <text x="167" y="444" font-size="9" fill="#333399">Logs for Team B</text>
+  <rect x="275" y="430" width="100" height="22" rx="4" fill="#D0FFD0" stroke="#99CC99"/>
+  <text x="282" y="444" font-size="9" fill="#339933">Logs for Team C</text>
+
+  <!-- Arrows to Kafka -->
+  <line x1="95" y1="452" x2="200" y2="490" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="210" y1="452" x2="210" y2="490" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="325" y1="452" x2="220" y2="490" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- Kafka Bus -->
+  <rect x="100" y="495" width="280" height="35" rx="18" fill="#7B42BC" stroke="#5A2D91" stroke-width="2"/>
+  <text x="240" y="517" text-anchor="middle" font-size="13" fill="white" font-weight="bold">Kafka Bus</text>
+
+  <!-- Custom Shipper (On-Prem) -->
+  <line x1="240" y1="530" x2="240" y2="560" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <rect x="140" y="565" width="200" height="32" rx="6" fill="#FFF3CD" stroke="#E0C97A" stroke-width="2"/>
+  <text x="240" y="586" text-anchor="middle" font-size="11" fill="#856404" font-weight="bold">Custom Shipper to Bulk API</text>
+
+  <!-- ==================== GCP CLOUD SECTION ==================== -->
+  <rect x="530" y="70" width="650" height="500" rx="12" fill="#F0F8FF" stroke="#4285F4" stroke-width="2" stroke-dasharray="8,4"/>
+  <text x="950" y="95" font-size="18" font-weight="bold" fill="#4285F4">☁️ GCP CLOUD</text>
+
+  <!-- App-Dev-Frontend -->
+  <rect x="550" y="110" width="220" height="120" rx="6" fill="#E8F0FE" stroke="#A8C7FA" stroke-width="1"/>
+  <text x="560" y="128" font-size="10" fill="#1967D2">☁️ App-Dev-Frontend</text>
+  <rect x="560" y="135" width="150" height="24" rx="4" fill="#D2E3FC" stroke="#A8C7FA"/>
+  <text x="575" y="152" font-size="11" fill="#1A73E8" font-weight="bold">Cloud CDN</text>
+  <rect x="560" y="167" width="150" height="24" rx="4" fill="#FDD663" stroke="#F9AB00"/>
+  <text x="575" y="184" font-size="11" fill="#E37400" font-weight="bold">⚡ API Gateway</text>
+
+  <!-- Cloud Interconnect label between on-prem and GCP -->
+  <line x1="490" y1="280" x2="545" y2="280" stroke="#4285F4" stroke-width="2" stroke-dasharray="6,3" marker-end="url(#arrow-blue)"/>
+  <text x="500" y="270" font-size="9" fill="#4285F4" font-weight="bold">Cloud</text>
+  <text x="493" y="295" font-size="9" fill="#4285F4" font-weight="bold">Interconnect</text>
+
+  <!-- FinTech-Ops -->
+  <rect x="550" y="250" width="220" height="100" rx="6" fill="#FEF7E0" stroke="#FDD663" stroke-width="1"/>
+  <text x="560" y="268" font-size="10" fill="#E37400">⚡ FinTech-Ops</text>
+  <rect x="560" y="275" width="180" height="24" rx="4" fill="#FCE8B2" stroke="#F9AB00"/>
+  <text x="575" y="292" font-size="11" fill="#E37400" font-weight="bold">λ Cloud Functions: Payment</text>
+  <rect x="560" y="310" width="180" height="24" rx="4" fill="#FCE8B2" stroke="#F9AB00"/>
+  <text x="575" y="327" font-size="11" fill="#E37400" font-weight="bold">📬 Pub/Sub Order Topic</text>
+
+  <!-- App-Dev-Backend -->
+  <rect x="800" y="110" width="360" height="150" rx="6" fill="#E8F5E9" stroke="#A5D6A7" stroke-width="1"/>
+  <text x="810" y="128" font-size="10" fill="#2E7D32">☁️ App-Dev-Backend</text>
+  <rect x="810" y="135" width="160" height="24" rx="4" fill="#C8E6C9" stroke="#81C784"/>
+  <text x="825" y="152" font-size="11" fill="#1B5E20" font-weight="bold">🔥 GKE Checkout Svc</text>
+  <rect x="990" y="135" width="150" height="24" rx="4" fill="#C8E6C9" stroke="#81C784"/>
+  <text x="1005" y="152" font-size="11" fill="#1B5E20" font-weight="bold">🔐 GKE Auth Svc</text>
+  <rect x="810" y="175" width="160" height="24" rx="4" fill="#C8E6C9" stroke="#81C784"/>
+  <text x="825" y="192" font-size="11" fill="#1B5E20" font-weight="bold">🛡️ Cloud Armor</text>
+  <rect x="990" y="175" width="150" height="24" rx="4" fill="#BBDEFB" stroke="#64B5F6"/>
+  <text x="1005" y="192" font-size="11" fill="#1565C0" font-weight="bold">🗃️ Firestore Sessions</text>
+  <rect x="810" y="215" width="160" height="24" rx="4" fill="#C8E6C9" stroke="#81C784"/>
+  <text x="825" y="232" font-size="11" fill="#1B5E20" font-weight="bold">📊 VPC Flow Logs</text>
+
+  <!-- Cloud Logging -->
+  <rect x="800" y="290" width="200" height="35" rx="6" fill="#E8F0FE" stroke="#4285F4" stroke-width="2"/>
+  <text x="900" y="312" text-anchor="middle" font-size="12" fill="#1A73E8" font-weight="bold">📋 Cloud Logging</text>
+
+  <!-- Arrow from services to Cloud Logging -->
+  <line x1="900" y1="260" x2="900" y2="288" stroke="#4285F4" stroke-width="1.5" marker-end="url(#arrow-blue)"/>
+
+  <!-- Custom Shipper (GCP) -->
+  <rect x="770" y="380" width="200" height="32" rx="6" fill="#FFF3CD" stroke="#E0C97A" stroke-width="2"/>
+  <text x="870" y="401" text-anchor="middle" font-size="11" fill="#856404" font-weight="bold">Custom Shipper to Bulk API</text>
+  <line x1="900" y1="325" x2="870" y2="378" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="920" y="360" font-size="9" fill="#888">All GCP logs</text>
+
+  <!-- ==================== ELASTIC SECTION ==================== -->
+  <!-- Elastic logo area -->
+  <text x="650" y="530" font-size="15" font-weight="bold" fill="#FEC514">Elastic</text>
+  <circle cx="638" cy="525" r="12" fill="#FEC514" opacity="0.3"/>
+
+  <!-- Arrows from shippers to Wired Streams -->
+  <line x1="240" y1="597" x2="560" y2="630" stroke="#555" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="870" y1="412" x2="680" y2="618" stroke="#555" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- Wired Streams -->
+  <rect x="555" y="620" width="250" height="50" rx="8" fill="#FEC514" stroke="#E0B000" stroke-width="2"/>
+  <text x="680" y="640" text-anchor="middle" font-size="14" font-weight="bold" fill="#333">/wired Streams</text>
+  <rect x="620" y="675" width="120" height="24" rx="12" fill="#E8F0FE" stroke="#4285F4" stroke-width="1"/>
+  <text x="680" y="691" text-anchor="middle" font-size="11" fill="#4285F4" font-weight="bold">logs.otel</text>
+  <line x1="680" y1="670" x2="680" y2="673" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- OTel badge -->
+  <rect x="810" y="670" width="120" height="24" rx="12" fill="#E0F2F1" stroke="#4DB6AC" stroke-width="1"/>
+  <text x="870" y="686" text-anchor="middle" font-size="10" fill="#00897B" font-weight="bold">OTel Format ✓</text>
+</svg>
